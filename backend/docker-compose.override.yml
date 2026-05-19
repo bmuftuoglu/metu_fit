@@ -1,0 +1,25 @@
+version: "3.9"
+
+# Lokal geliştirme overrides — prod'da kullanılmaz
+services:
+  api:
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app/src:/app/src
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+    environment:
+      - ENVIRONMENT=development
+
+  db:
+    ports:
+      - "5432:5432"
+
+  minio:
+    ports:
+      - "9000:9000"
+
+  # Cloudflared'i dev'de devre dışı bırak (lokal erişim yeterli)
+  cloudflared:
+    profiles:
+      - prod

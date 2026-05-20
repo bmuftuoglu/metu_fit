@@ -7,6 +7,7 @@ services:
       - "8000:8000"
     volumes:
       - ./app/src:/app/src
+      - ./app/alembic:/app/alembic
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     environment:
       - ENVIRONMENT=development

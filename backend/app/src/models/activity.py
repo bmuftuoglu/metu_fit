@@ -2,7 +2,7 @@ from datetime import datetime
 import uuid
 
 from sqlalchemy import String, Integer, Numeric, TIMESTAMP, ForeignKey, UniqueConstraint
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.sql import func
 
@@ -23,6 +23,8 @@ class ActivityLog(Base):
     avg_speed_kmh: Mapped[float | None] = mapped_column(Numeric(6, 2), nullable=True)
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now())
 
+    route: Mapped["ActivityRoute | None"] = relationship("ActivityRoute", back_populates="activity_log", uselist=False, lazy="noload")
+
 
 class ActivityRoute(Base):
     __tablename__ = "activity_routes"
@@ -35,3 +37,5 @@ class ActivityRoute(Base):
     bbox_east: Mapped[float | None] = mapped_column(Numeric(10, 7), nullable=True)
     bbox_west: Mapped[float | None] = mapped_column(Numeric(10, 7), nullable=True)
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now())
+
+    activity_log: Mapped["ActivityLog"] = relationship("ActivityLog", back_populates="route")

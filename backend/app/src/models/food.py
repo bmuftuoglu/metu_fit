@@ -2,7 +2,7 @@ from datetime import date, datetime
 import uuid
 
 from sqlalchemy import String, Text, Numeric, Boolean, Date, TIMESTAMP, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 
@@ -23,6 +23,8 @@ class FoodItem(Base):
     created_by: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now())
 
+    logs: Mapped[list["FoodLog"]] = relationship("FoodLog", back_populates="food_item", lazy="noload")
+
 
 class FoodLog(Base):
     __tablename__ = "food_logs"
@@ -35,3 +37,5 @@ class FoodLog(Base):
     meal_type: Mapped[str] = mapped_column(String(20), nullable=False)
     logged_at: Mapped[date] = mapped_column(Date, nullable=False, server_default=func.current_date())
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now())
+
+    food_item: Mapped["FoodItem"] = relationship("FoodItem", back_populates="logs", lazy="noload")

@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.services.minio_service import ensure_bucket_exists
-from src.routers import auth, users, uploads
+from src.routers import auth, users, uploads, food, activity, groups, posts
 
 
 @asynccontextmanager
@@ -28,9 +28,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router, prefix="/v1")
-app.include_router(users.router, prefix="/v1")
-app.include_router(uploads.router, prefix="/v1")
+PREFIX = "/v1"
+app.include_router(auth.router, prefix=PREFIX)
+app.include_router(users.router, prefix=PREFIX)
+app.include_router(uploads.router, prefix=PREFIX)
+app.include_router(food.router, prefix=PREFIX)
+app.include_router(activity.router, prefix=PREFIX)
+app.include_router(groups.router, prefix=PREFIX)
+app.include_router(posts.router, prefix=PREFIX)
 
 
 @app.get("/health")

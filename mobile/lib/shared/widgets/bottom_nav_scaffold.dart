@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/constants/app_colors.dart';
 import '../../core/router/route_names.dart';
 
 class BottomNavScaffold extends StatelessWidget {
@@ -18,26 +19,47 @@ class BottomNavScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: child,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex(context),
-        onDestinationSelected: (index) {
-          switch (index) {
-            case 0:
-              context.go(RouteNames.home);
-            case 1:
-              context.go(RouteNames.groups);
-            case 2:
-              context.go(RouteNames.activity);
-            case 3:
-              context.go(RouteNames.profile);
-          }
-        },
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Ana Sayfa'),
-          NavigationDestination(icon: Icon(Icons.group_outlined), selectedIcon: Icon(Icons.group), label: 'Gruplar'),
-          NavigationDestination(icon: Icon(Icons.directions_run_outlined), selectedIcon: Icon(Icons.directions_run), label: 'Aktivite'),
-          NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profil'),
-        ],
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          border: Border(top: BorderSide(color: AppColors.border, width: 1)),
+        ),
+        child: NavigationBar(
+          selectedIndex: _currentIndex(context),
+          onDestinationSelected: (index) {
+            switch (index) {
+              case 0:
+                context.go(RouteNames.home);
+              case 1:
+                context.go(RouteNames.groups);
+              case 2:
+                context.go(RouteNames.activity);
+              case 3:
+                context.go(RouteNames.profile);
+            }
+          },
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(Icons.home_outlined),
+              selectedIcon: Icon(Icons.home_rounded),
+              label: 'Ana Sayfa',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.group_outlined),
+              selectedIcon: Icon(Icons.group_rounded),
+              label: 'Gruplar',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.directions_run_outlined),
+              selectedIcon: Icon(Icons.directions_run_rounded),
+              label: 'Aktivite',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.person_outline_rounded),
+              selectedIcon: Icon(Icons.person_rounded),
+              label: 'Profil',
+            ),
+          ],
+        ),
       ),
     );
   }

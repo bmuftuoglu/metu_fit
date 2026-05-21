@@ -41,7 +41,7 @@ async def create_food_log(db: AsyncSession, data: FoodLogCreate, user_id: uuid.U
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Food item not found")
 
-    calories = round(food_item.calories_per_100g * data.grams / 100, 2)
+    calories = round(float(food_item.calories_per_100g) * data.grams / 100, 2)
     log = FoodLog(
         user_id=user_id,
         food_item_id=data.food_item_id,
@@ -53,6 +53,7 @@ async def create_food_log(db: AsyncSession, data: FoodLogCreate, user_id: uuid.U
     db.add(log)
     await db.commit()
     await db.refresh(log)
+    log.food_item = food_item
     return log
 
 

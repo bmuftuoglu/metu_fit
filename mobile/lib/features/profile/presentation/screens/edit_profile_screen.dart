@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/profile_provider.dart';
+import '../../../food_log/presentation/providers/food_provider.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({super.key});
@@ -53,6 +54,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             age: int.tryParse(_ageCtrl.text),
             goalCalories: int.tryParse(_goalCtrl.text),
           );
+      ref.invalidate(dailySummaryProvider);
       if (mounted) context.pop();
     } catch (e) {
       setState(() => _loading = false);

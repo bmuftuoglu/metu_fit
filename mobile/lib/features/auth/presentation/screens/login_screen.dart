@@ -36,6 +36,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         SnackBar(
           content: Text(ref.read(authProvider).error ?? 'Giriş başarısız.'),
           backgroundColor: AppColors.error,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       );
     }
@@ -46,63 +48,139 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final isLoading = ref.watch(authProvider).isLoading;
 
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Spacer(),
-                const Icon(Icons.fitness_center, size: 64, color: AppColors.primary),
-                const SizedBox(height: 12),
-                const Text(
-                  'MetuFit',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: AppColors.primary),
-                ),
-                const SizedBox(height: 48),
-                TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'E-posta',
-                    prefixIcon: Icon(Icons.email_outlined),
-                  ),
-                  validator: (v) => (v == null || !v.contains('@')) ? 'Geçerli bir e-posta girin' : null,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  decoration: InputDecoration(
-                    labelText: 'Şifre',
-                    prefixIcon: const Icon(Icons.lock_outlined),
-                    suffixIcon: IconButton(
-                      icon: Icon(_obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined),
-                      onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+      backgroundColor: AppColors.primary,
+      body: Column(
+        children: [
+          Expanded(
+            flex: 38,
+            child: SafeArea(
+              bottom: false,
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 76,
+                      height: 76,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withAlpha(30),
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      child: const Icon(
+                        Icons.fitness_center_rounded,
+                        size: 42,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  validator: (v) => (v == null || v.length < 6) ? 'En az 6 karakter' : null,
+                    const SizedBox(height: 16),
+                    const Text(
+                      'MetuFit',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Sağlıklı yaşamın takipçisi',
+                      style: TextStyle(color: Colors.white70, fontSize: 13),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 24),
-                FilledButton(
-                  onPressed: isLoading ? null : _submit,
-                  child: isLoading
-                      ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                      : const Text('Giriş Yap'),
-                ),
-                const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () => context.go(RouteNames.register),
-                  child: const Text('Hesabın yok mu? Kayıt ol'),
-                ),
-                const Spacer(),
-              ],
+              ),
             ),
           ),
-        ),
+          Expanded(
+            flex: 62,
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+              ),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(28, 32, 28, 28),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text(
+                        'Hoş geldin!',
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 4),
+                      const Text(
+                        'Hesabına giriş yap',
+                        style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                      ),
+                      const SizedBox(height: 32),
+                      TextFormField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(
+                          labelText: 'E-posta',
+                          prefixIcon: Icon(Icons.email_outlined),
+                        ),
+                        validator: (v) =>
+                            (v == null || !v.contains('@')) ? 'Geçerli bir e-posta girin' : null,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: _obscurePassword,
+                        decoration: InputDecoration(
+                          labelText: 'Şifre',
+                          prefixIcon: const Icon(Icons.lock_outlined),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                            ),
+                            onPressed: () =>
+                                setState(() => _obscurePassword = !_obscurePassword),
+                          ),
+                        ),
+                        validator: (v) =>
+                            (v == null || v.length < 6) ? 'En az 6 karakter' : null,
+                      ),
+                      const SizedBox(height: 28),
+                      FilledButton(
+                        onPressed: isLoading ? null : _submit,
+                        child: isLoading
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Text('Giriş Yap'),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Hesabın yok mu?',
+                            style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                          ),
+                          TextButton(
+                            onPressed: () => context.go(RouteNames.register),
+                            child: const Text('Kayıt ol'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

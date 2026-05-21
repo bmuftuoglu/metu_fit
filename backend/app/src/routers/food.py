@@ -51,13 +51,7 @@ async def add_food_log(
     current_user: CurrentUser = None,
 ):
     log = await food_service.create_food_log(db, data, current_user.id)
-    from sqlalchemy import select
-    from sqlalchemy.orm import selectinload
-    from src.models.food import FoodLog
-    result = await db.execute(
-        select(FoodLog).options(selectinload(FoodLog.food_item)).where(FoodLog.id == log.id)
-    )
-    return result.scalar_one()
+    return log
 
 
 @router.delete("/logs/{log_id}", status_code=204)

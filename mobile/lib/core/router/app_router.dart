@@ -22,17 +22,18 @@ import '../../features/posts/presentation/screens/create_activity_post_screen.da
 import 'route_names.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authProvider);
-
-  return GoRouter(
+  final router = GoRouter(
     initialLocation: RouteNames.splash,
     redirect: (context, state) {
+      final authState = ref.read(authProvider);
       final isAuth = authState.status == AuthStatus.authenticated;
       final isUnauth = authState.status == AuthStatus.unauthenticated;
+      final isUnknown = authState.status == AuthStatus.unknown;
       final isAuthRoute = state.uri.toString().startsWith('/auth');
       final isSplash = state.uri.toString() == RouteNames.splash;
 
-      if (isSplash) return null;
+      if (isUnknown) return isSplash ? null : RouteNames.splash;
+      if (isSplash) return isAuth ? RouteNames.home : RouteNames.login;
       if (isUnauth && !isAuthRoute) return RouteNames.login;
       if (isAuth && isAuthRoute) return RouteNames.home;
       return null;
@@ -108,4 +109,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
     ],
   );
+
+  ref.listen(authProvider, (_, next) => router.refresh());
+
+  return router;
 });

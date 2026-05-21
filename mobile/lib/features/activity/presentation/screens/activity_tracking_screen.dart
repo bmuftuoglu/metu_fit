@@ -185,7 +185,7 @@ class _ActivityTrackingScreenState extends ConsumerState<ActivityTrackingScreen>
                     ),
                   if (tracking.isTracking) ...[
                     Text(elapsedStr,
-                        style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold, fontFeatures: [])),
+                        style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,

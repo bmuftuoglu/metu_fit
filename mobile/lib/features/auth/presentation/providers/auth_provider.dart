@@ -2,6 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/datasources/auth_remote_datasource.dart';
 import '../../data/models/token_model.dart';
 import '../../../../core/storage/secure_storage_service.dart';
+import '../../../food_log/presentation/providers/food_provider.dart';
+import '../../../profile/presentation/providers/profile_provider.dart';
+import '../../../activity/presentation/providers/activity_provider.dart';
+import '../../../groups/presentation/providers/groups_provider.dart';
 
 enum AuthStatus { unknown, authenticated, unauthenticated }
 
@@ -75,6 +79,10 @@ class AuthNotifier extends Notifier<AuthState> {
       } catch (_) {}
     }
     await SecureStorageService.clearTokens();
+    ref.invalidate(profileProvider);
+    ref.invalidate(activitiesProvider);
+    ref.invalidate(myGroupsProvider);
+    ref.invalidate(dailySummaryProvider);
     state = state.copyWith(status: AuthStatus.unauthenticated);
   }
 

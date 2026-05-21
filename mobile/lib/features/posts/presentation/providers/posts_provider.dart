@@ -9,6 +9,7 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<PostModel>>> {
   final String groupId;
   String? _nextCursor;
   bool _hasMore = true;
+  bool _isLoadingMore = false;
 
   FeedNotifier(this._ds, this.groupId) : super(const AsyncValue.loading()) {
     load();
@@ -27,14 +28,18 @@ class FeedNotifier extends StateNotifier<AsyncValue<List<PostModel>>> {
   }
 
   Future<void> loadMore() async {
-    if (!_hasMore) return;
+    if (!_hasMore || _isLoadingMore) return;
+    _isLoadingMore = true;
     final current = state.valueOrNull ?? [];
     try {
       final result = await _ds.getGroupFeed(groupId, cursor: _nextCursor);
       _nextCursor = result.nextCursor;
       _hasMore = _nextCursor != null;
       state = AsyncValue.data([...current, ...result.items]);
-    } catch (_) {}
+    } catch (_) {
+    } finally {
+      _isLoadingMore = false;
+    }
   }
 
   void toggleLike(String postId) {

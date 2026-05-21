@@ -1,26 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import '../providers/auth_provider.dart';
-import '../../../../core/router/route_names.dart';
 import '../../../../core/constants/app_colors.dart';
 
-class SplashScreen extends ConsumerWidget {
+class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AuthState>(authProvider, (_, next) {
-      if (next.status == AuthStatus.authenticated) {
-        context.go(RouteNames.home);
-      } else if (next.status == AuthStatus.unauthenticated) {
-        context.go(RouteNames.login);
-      }
-    });
-
-    return Scaffold(
+  Widget build(BuildContext context) {
+    return const Scaffold(
       backgroundColor: AppColors.primary,
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

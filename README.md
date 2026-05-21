@@ -115,12 +115,6 @@ flutter run
 
 ---
 
-## Authors
-
-- **Barış Müftüoğlu** — [@bmuftuoglu](https://github.com/bmuftuoglu)
-
----
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
@@ -242,12 +236,6 @@ cp .env.example .env   # API_BASE_URL ayarla
 flutter pub get
 flutter run
 ```
-
----
-
-## Yazarlar
-
-- **Barış Müftüoğlu** — [@bmuftuoglu](https://github.com/bmuftuoglu)
 
 ---
 
